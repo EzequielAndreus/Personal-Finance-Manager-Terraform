@@ -1,0 +1,53 @@
+# ================================
+# Terraform Project GitIgnore
+# ================================
+
+# Local Terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+
+# Terraform crash logs
+crash.log
+crash.*.log
+
+# Sensitive variable definitions
+*.tfvars
+*.tfvars.json
+backend.hcl
+backend.tfvars
+
+# AWS credentials and configs
+.aws/
+credentials
+config
+
+# Environment files
+.env
+*.env
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+.DS_Store
+
+# OS-generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Lock files (optional)
+package-lock.json
+yarn.lock
