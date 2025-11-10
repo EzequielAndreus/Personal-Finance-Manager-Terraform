@@ -43,8 +43,3 @@ output "vpc_id" {
   description = "The ID of the VPC"
   value       = data.aws_vpc.existing.id
 }
-
-output "security_group_id" {
-  description = "The ID of the security group attached to the EC2 instance"
-  value       = aws_security_group.instance_sg.id
-}
