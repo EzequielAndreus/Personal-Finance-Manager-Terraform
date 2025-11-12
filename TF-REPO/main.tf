@@ -19,19 +19,17 @@ data "aws_subnet" "existing" {
 # -------------------------------
 # Internet Gateway (attach to existing VPC)
 # -------------------------------
-resource "aws_internet_gateway" "igw" {
-  vpc_id = data.aws_vpc.existing.id
-
-  tags = {
-    Name    = "${var.project_name}-igw"
-    Project = var.project_name
+data "aws_internet_gateway" "existing" {
+  filter {
+    name   = "attachment.vpc-id"
+    values = [data.aws_vpc.existing.id]
   }
 }
 
 # -------------------------------
 # Route Table for Public Subnet
 # -------------------------------
-resource "aws_route_table" "public" {
+resource "aws_route_table" "public" 
   vpc_id = data.aws_vpc.existing.id
 
   route {
