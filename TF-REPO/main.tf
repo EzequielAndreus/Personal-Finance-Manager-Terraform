@@ -54,12 +54,25 @@ resource "aws_route_table_association" "public_assoc" {
 # -------------------------------
 # EC2 Instance
 # -------------------------------
-resource "aws_instance" "web" {
-  ami           = var.instance_ami
-  instance_type = var.instance_type
-  subnet_id     = data.aws_subnet.existing.id
-  key_name      = var.key_name
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical (Ubuntu)
 
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
   associate_public_ip_address = true
 
   tags = {
