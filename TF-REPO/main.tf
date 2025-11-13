@@ -69,12 +69,20 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_instance" "web" {
-  ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.instance_type
-  key_name               = var.key_name
-  associate_public_ip_address = true
+data "aws_security_group" "existing" {
+  filter {
+    name   = "group-name"
+    values = ["launch-wizard-2"]
+  }
+}
 
+resource "aws_instance" "web" {
+  ami                         = var.instance_ami
+  instance_type               = var.instance_type
+  subnet_id                   = data.aws_subnet.existing.id
+  vpc_security_group_ids       = [data.aws_security_group.existing.id] 
+  key_name                    = var.key_name
+  associate_public_ip_address  = true
   tags = {
     Name    = "${var.project_name}-ec2"
     Project = var.project_name
