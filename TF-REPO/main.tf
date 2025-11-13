@@ -17,7 +17,7 @@ data "aws_subnet" "existing" {
 }
 
 # -------------------------------
-# Internet Gateway (attach to existing VPC)
+# Internet Gateway (reuse existing one)
 # -------------------------------
 data "aws_internet_gateway" "existing" {
   filter {
@@ -34,7 +34,7 @@ resource "aws_route_table" "public"
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
+    gateway_id = data.aws_internet_gateway.existing.id
   }
 
   tags = {
