@@ -19,7 +19,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "Name of the EC2 key pair to allow SSH access"
   type        = string
-  default     = "FTM-KeyPair"
+  default     = "SoftserveFM"
 }
 
 # -------------------------------
