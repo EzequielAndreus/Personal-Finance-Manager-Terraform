@@ -29,7 +29,7 @@ data "aws_internet_gateway" "existing" {
 # -------------------------------
 # Route Table for Public Subnet
 # -------------------------------
-resource "aws_route_table" "public" 
+resource "aws_route_table" "public" {
   vpc_id = data.aws_vpc.existing.id
 
   route {
