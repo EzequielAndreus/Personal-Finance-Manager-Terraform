@@ -60,3 +60,61 @@ pipeline {
     environment {
         TERRAFORM_DIR = '/home/ubuntu/Personal-Finance-Manager-Terraform'
     }
+    
+    stages {
+        stage('Send notification') {
+            steps {
+                sendDeploymentInfoSlack('pipeline in progress')
+                sendDeploymentInfoJira('in_progress')
+            }
+        }
+        stage('Check Connection') {
+            steps {
+                script {
+                    def connectionVars = getConnectionCredentials()
+                    sshagent([params.ssh_key]) {
+                        checkSSHConnection(connectionVars)
+                    }
+                }
+            }
+        }
+        stage('Execution') {
+            steps {
+                script {
+                    echo 'Starting execution'
+                    def envVars = getAllConnectionCredentials()
+                    sshagent([params.ssh_key]) {
+                        runTerraformCommands(envVars)
+                    }
+                }
+            }
+            post {
+                success {
+                    echo 'Execution successful!'
+                    proceedMessage()
+                }
+                failure {
+                    echo 'Execution failed! Check logs above.'
+                }
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+            sendDeploymentInfoJira('successful')
+            sendDeploymentInfoSlack('execution successful')
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
+            sendDeploymentInfoJira('failed')
+            sendDeploymentInfoSlack('execution failed')
+        }
+        unstable {
+            echo 'Pipeline is unstable.'
+            sendDeploymentInfoJira('unknown')
+            sendDeploymentInfoSlack('execution unstable')
+        }
+    }
+}
