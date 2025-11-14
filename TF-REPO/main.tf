@@ -77,7 +77,7 @@ data "aws_security_group" "existing" {
 }
 
 resource "aws_instance" "web" {
-  ami                         = var.instance_ami
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   subnet_id                   = data.aws_subnet.existing.id
   vpc_security_group_ids       = [data.aws_security_group.existing.id] 
